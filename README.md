@@ -198,37 +198,6 @@ the `inference.py` CLI default is 1.0. The full pipeline defaults to 0.6 and
 generates cues internally; `scripts/infer.sh` is the direct entry point for
 already prepared cues.
 
-## Training
-
-See [the data format](docs/DATA.md). A single paired video dataset can be used as
-follows after preparing the media and editing/copying the example metadata:
-
-```bash
-CUDA_VISIBLE_DEVICES=0 bash scripts/train.sh \
-  --dataset_base_path data/rgb \
-  --dataset_metadata_path examples/metadata.csv \
-  --dataset_metadata_match_path examples/metadata_match.csv \
-  --shading_cue_base_path data/shading_cue \
-  --shading_gt_base_path data/shading_gt
-```
-
-The script initializes from the base Wan model. To initialize training from the
-selected JointLight checkpoint, append:
-
-```bash
---resume_from_checkpoint models/JointLight/JointLight.safetensors
-```
-
-This loads model weights only; optimizer, scheduler, epoch and sampling-step state
-are not restored. The launch example retains the original low-resolution settings
-(416 × 256, up to 81 frames, learning rate 1e-5, RGB and shading loss).
-
-`configs/single_gpu.yaml` provides a portable single-process launch. For distributed
-training, supply your own Accelerate configuration via `ACCELERATE_CONFIG`.
-Do not reuse machine addresses or ranks from the original experiment scripts.
-Arguments after `scripts/train.sh` can override the example defaults.
-
-
 ## Attribution
 
 The implementation is derived from DiffSynth-Studio and Wan. The original
