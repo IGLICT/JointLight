@@ -1,0 +1,17 @@
+include README.md LICENSE constraints.txt requirements.txt requirements-shading.txt model_configs.json CHECKPOINTS.sha256
+recursive-include configs *.yaml *.json
+recursive-include docs *.md
+recursive-include examples *.csv
+recursive-include examples/videos *.mp4 *.md *.json
+recursive-include examples/hdris *.hdr *.md
+recursive-include scripts *.sh *.py
+recursive-include third_party/MoGe *.py *.toml *.md *.sha256 LICENSE
+include train.py inference.py run_relit_pipeline.py run_relighting.py
+include pyproject.toml THIRD_PARTY_NOTICES.md .gitignore .gitattributes
+prune models
+prune outputs*
+prune examples/assets
+prune releases
+prune results
+prune logs
+global-exclude __pycache__ *.py[cod] *.safetensors *.pth *.pt *.ckpt

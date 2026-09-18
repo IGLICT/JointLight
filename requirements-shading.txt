@@ -1,0 +1,5 @@
+# Install from the JointLight root into the same environment as requirements.txt.
+-e ./third_party/MoGe
+mitsuba==3.7.1
+drjit==1.2.0
+imageio[ffmpeg]

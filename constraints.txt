@@ -1,0 +1,34 @@
+# Release baseline for Python 3.10 / Linux x86_64.
+# Install torch/torchvision from the CUDA 12.8 wheel index before the other packages.
+# These constrain the model/rendering stack; this is not a complete transitive lockfile.
+torch==2.8.0
+torchvision==0.23.0
+transformers==4.56.1
+tokenizers==0.22.0
+peft==0.17.1
+accelerate==1.10.1
+numpy==2.2.6
+Pillow==11.3.0
+imageio==2.37.0
+imageio-ffmpeg==0.6.0
+safetensors==0.6.2
+einops==0.8.1
+sentencepiece==0.2.1
+protobuf==6.32.0
+modelscope==1.30.0
+huggingface-hub==0.35.0
+ftfy==6.3.1
+regex==2025.9.1
+pandas==2.3.2
+orjson==3.11.3
+opencv-python-headless==4.12.0.88
+tqdm==4.67.1
+typing_extensions==4.15.0
+scipy==1.15.3
+matplotlib==3.10.7
+trimesh==4.12.2
+mitsuba==3.7.1
+drjit==1.2.0
+moderngl==5.12.0
+setuptools==78.1.1
+wheel==0.45.1

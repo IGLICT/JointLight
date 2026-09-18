@@ -1,0 +1,22 @@
+# Install a CUDA-compatible torch / torchvision pair before installing this package.
+torch>=2.4
+torchvision
+transformers>=4.45,<5
+peft>=0.13,<1
+accelerate>=1,<2
+numpy
+Pillow
+imageio[ffmpeg]
+safetensors
+einops
+sentencepiece
+protobuf
+modelscope
+huggingface-hub
+ftfy
+regex
+pandas
+orjson
+opencv-python-headless
+tqdm
+typing_extensions
