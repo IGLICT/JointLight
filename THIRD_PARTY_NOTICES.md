@@ -18,8 +18,7 @@
 
 ## Example media
 
-The maintainer has confirmed public redistribution of the six example videos.
-They are demonstration assets, not a grant of the source-code license to the
+The selected clips in `examples/videos` are demonstration assets, not a grant of the source-code license to the
 underlying video content. Training datasets are not distributed.
 
 The four HDRI names correspond to the following Poly Haven assets. Their official

@@ -126,12 +126,23 @@ MoGe downloads `Ruicheng/moge-2-vitl-normal` on first use.
 
 Edit [configs/inference.json](configs/inference.json) to choose input videos,
 HDRIs, rotation, prompts, model paths and inference settings. By default it runs
-all 24 combinations of the six example videos and four HDRIs; only `dry_field_1k`
+all 28 combinations of the seven example videos and four HDRIs; only `dry_field_1k`
 rotates clockwise.
 
 ```bash
 conda activate jointlight
 CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 bash scripts/relight.sh --config configs/inference.json
+```
+
+After inference, this also saves `outputs/examples/four_lights/video_N_four_lights.mp4`:
+original video + four relit videos, with the corresponding chrome ball below each
+relit video. Rotating lighting stays synchronized. Columns follow the HDRI order
+in the config; set `"light_comparison": false` to disable this step.
+
+To generate only these comparisons from existing results:
+
+```bash
+python run_relighting.py --config configs/inference.json --comparison_only
 ```
 
 Use a single GPU with `CUDA_VISIBLE_DEVICES=0`. Validate your config first with:

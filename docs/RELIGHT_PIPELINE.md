@@ -50,7 +50,7 @@ package is installed in the same environment as JointLight.
 ## Batch the release examples
 
 The repository contains the prepared MP4 examples in `examples/videos/` (currently
-`video_0.mp4` to `video_5.mp4`) and four HDRIs in `examples/hdris/`. The default
+`video_0.mp4` to `video_6.mp4`) and four HDRIs in `examples/hdris/`. The default
 `configs/inference.json` selects these files and their lighting settings:
 
 ```bash
@@ -59,8 +59,8 @@ CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 bash scripts/relight_examples.sh
 
 The number of workers follows the comma-separated GPU list in
 `CUDA_VISIBLE_DEVICES`; `--gpus` can override it. If neither is set,
-GPU indices are discovered with `nvidia-smi`. The current six videos
-and four HDRIs produce 24 runs. `dry_field_1k.hdr` is rendered with
+GPU indices are discovered with `nvidia-smi`. The current seven videos
+and four HDRIs produce 28 runs. `dry_field_1k.hdr` is rendered with
 `--rotate CW`; all other HDRIs use fixed lighting. Results are grouped below
 `outputs/examples/video_N/<hdri_name>/`, so parallel runs do not overwrite one
 another. The wrapper uses 81 frames, shading timestep 0.6 and input timestep 1.0

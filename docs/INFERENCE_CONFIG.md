@@ -12,7 +12,7 @@ For eight GPUs:
 CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 bash scripts/relight.sh --config configs/inference.json
 ```
 
-The default config explicitly selects six videos and four HDRIs, producing 24
+The default config explicitly selects seven videos and four HDRIs, producing 28
 combinations. Only `dry_field_1k` rotates clockwise. Each worker processes one
 combination at a time and runs geometry, shading, diffusion and comparison in
 sequence. With no arguments, `scripts/relight.sh` uses this default config.
@@ -61,6 +61,7 @@ local `.pt`/`.pth` paths resolve against `path_root`.
 
 | Section | Supported fields |
 | --- | --- |
+| `light_comparison` | Boolean; after all jobs finish, compose original + selected relit videos with synchronized chrome balls. Enabled in the default config; omitted means disabled. |
 | `defaults` | Shared single-run options: checkpoint, model_config, tokenizer_path, moge_checkpoint, prompt, device, height, width, num_frames, cfg_scale, seed, noise strengths, rotate, envmap_angle, threshold, exposure, sample count, output_dir, no_comparison, etc. See `python run_relit_pipeline.py --help`. |
 | `videos` | Required `path`; optional `name`, `prompt`, `height`, `width`, `input_video_path`. |
 | `hdris` | Required `path`; optional `name`, `rotate`, `envmap_angle`, `shading_exposure_ev`, `shading_spp`. |
@@ -90,6 +91,24 @@ Each run writes `outputs/<video-name>/<hdri-name>/` (under your `output_dir`):
 - `moge_shading/`: rendered shading video and exposure metadata.
 - `relit/`: generated RGB and shading videos.
 - `comparison.mp4`: input / MoGe shading / predicted shading / relit / envmap.
+- `result.json`: exact output paths and lighting settings for later comparisons.
+
+With `light_comparison` enabled, the batch also saves
+`outputs/examples/four_lights/video_N_four_lights.mp4` (under your `output_dir`).
+Columns follow `hdris` order, with the original video first. Each relit column
+has its chrome-ball preview below it, using the rendering yaw and reflection;
+preview exposure is fixed across the rotation. Static lights remain static.
+Custom configs can select any number of lights (the suffix is `_lights.mp4`
+when the count is not four). Chrome-ball previews use the CPU and are cached.
+
+Rebuild comparisons without rerunning inference:
+
+```bash
+python run_relighting.py --config configs/inference.json --comparison_only
+```
+
+Use the same config as the completed run; all selected results must exist and
+have matching processed inputs, dimensions, frame counts and frame rates.
 
 Names default to the input filename stem. Specify unique `name` values when
 using the same file with multiple settings. Re-running the same named combination

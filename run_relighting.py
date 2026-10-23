@@ -76,7 +76,9 @@ def load_jobs(config_path):
     config_path = Path(config_path).expanduser().resolve()
     with config_path.open() as stream:
         config = json.load(stream)
-    check_keys(config, {'path_root', 'defaults', 'videos', 'hdris'}, 'config')
+    check_keys(config, {'path_root', 'defaults', 'videos', 'hdris', 'light_comparison'}, 'config')
+    if not isinstance(config.get('light_comparison', False), bool):
+        raise ValueError('light_comparison must be true or false')
     root = Path(absolute_path(config.get('path_root', '.'), config_path.parent))
     allowed = {a.dest for a in build_parser()._actions} - {
         'help', 'video_path', 'envmap_path', 'output_subdir', 'dry_run'}
@@ -127,12 +129,23 @@ def main(argv=None):
     parser.add_argument('--config', type=Path, default=REPO_ROOT / 'configs/inference.json')
     parser.add_argument('--gpus', help='Comma-separated physical GPU indices/UUIDs; defaults to CUDA_VISIBLE_DEVICES')
     parser.add_argument('--dry_run', action='store_true', help='Validate inputs and print jobs without loading models or writing outputs')
+    parser.add_argument('--comparison_only', action='store_true',
+                        help='Build chrome-ball comparisons from existing results; do not run inference')
     args = parser.parse_args(argv)
+    args.config = args.config.expanduser().resolve()
     try:
         jobs = load_jobs(args.config)
-        gpus = visible_gpus(args.gpus)
+        gpus = [] if args.comparison_only else visible_gpus(args.gpus)
+        comparison_enabled = args.comparison_only or json.loads(args.config.read_text()).get('light_comparison', False)
     except (ValueError, OSError) as exc:
         parser.error(str(exc))
+    if args.comparison_only:
+        if args.dry_run:
+            print(f'Would build lighting comparisons from {len(jobs)} existing results')
+        else:
+            from utils.light_comparison import make_light_comparisons
+            make_light_comparisons(jobs)
+        return
     print(f'{len(jobs)} jobs on {len(gpus)} GPU(s): {", ".join(gpus)}', flush=True)
 
     def worker(index):
@@ -152,6 +165,13 @@ def main(argv=None):
         futures = [pool.submit(worker, i) for i in range(min(len(gpus), len(jobs)))]
         for future in futures:
             future.result()
+
+    if comparison_enabled:
+        if args.dry_run:
+            print('Would build lighting comparisons after all inference jobs finish')
+        else:
+            from utils.light_comparison import make_light_comparisons
+            make_light_comparisons(jobs)
 
 
 if __name__ == '__main__':

@@ -1,6 +1,7 @@
 """Prepare an input video, render its shading cue, and run JointLight relighting."""
 
 import argparse
+import json
 import math
 import os
 from pathlib import Path
@@ -219,8 +220,17 @@ def main(argv=None):
     run_command(command, args.dry_run)
     print(f'Relighting output directory: {base / "relit"}', flush=True)
 
+    relit_video, output_shading = expected_inference_outputs(base, processed, shading, args)
+    if not args.dry_run:
+        if not relit_video.is_file():
+            raise FileNotFoundError(relit_video)
+        (base / 'result.json').write_text(json.dumps({
+            'input': str(processed), 'relit': str(relit_video),
+            'envmap': args.envmap_path, 'rotate': args.rotate,
+            'envmap_angle': args.envmap_angle, 'num_frames': args.num_frames,
+        }, indent=2) + '\n')
+
     if not args.no_comparison and args.envmap_path:
-        relit_video, output_shading = expected_inference_outputs(base, processed, shading, args)
         comparison = base / 'comparison.mp4'
         if not args.dry_run:
             for path in (relit_video, output_shading):
