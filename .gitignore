@@ -6,12 +6,14 @@ dist/
 .venv/
 .env
 .env.*
-models/
-outputs*/
-logs/
-wandb/
-data/
-datasets/
+# Runtime assets live at the repository root. Nested models/data are source code.
+/models/
+/outputs*/
+/logs/
+/wandb/
+/data/
+/datasets/
+/.conda-env*/
 *.safetensors
 *.pt
 *.pth

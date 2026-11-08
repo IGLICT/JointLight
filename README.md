@@ -1,17 +1,27 @@
 # JointLight
 
-Video relighting with joint RGB/shading diffusion, diffusion forcing, shared RoPE, and modality-conditioned adaLN. This initial source release retains the active Wan2.2-TI2V-5B training and inference implementation.
+Video relighting with joint RGB/shading diffusion, diffusion forcing, shared RoPE, and modality-conditioned adaLN. This source release retains the active Wan2.2-TI2V-5B training and inference implementation.
+
+Version 0.1.1 restores model/data source packages omitted from earlier commits.
+Use a fresh clone or pull this update before installing; see [release notes](CHANGELOG.md).
 
 ## Installation from scratch
 
 ### 1. Create the environment
 
-Open a terminal in the JointLight source directory, then run:
+Clone the source and create a new environment (do not reuse an unrelated
+DiffSynth or MoGe environment):
 
 ```bash
+git clone https://github.com/IGLICT/JointLight.git
+cd JointLight
 conda create -n jointlight -c conda-forge python=3.10 pip git ffmpeg -y
 conda activate jointlight
+python scripts/check_release.py
 ```
+
+If an environment named `jointlight` already exists, choose a new name in both
+conda commands. The source check requires no model weights or GPU dependencies.
 
 
 ### 2. Install the build tools and CUDA PyTorch wheels
@@ -208,6 +218,24 @@ The original noise controls are retained. The example uses shading noise 0.6;
 the `inference.py` CLI default is 1.0. The full pipeline defaults to 0.6 and
 generates cues internally; `scripts/infer.sh` is the direct entry point for
 already prepared cues.
+
+## Validation and troubleshooting
+
+A single video/HDRI demo has been run end to end in a newly created Python 3.10
+environment with the release constraints: `video_0.mp4` + `park_bench_1k.hdr`,
+480 × 832, 81 frames, seed 1, CFG 1.0, shading noise 0.6 and input noise 1.0.
+On an A800 80GB, the default 50 denoising steps took approximately 238 seconds
+(excluding loading, geometry, rendering and encoding). RGB, predicted shading
+and comparison videos were saved and decoded successfully, each with 81 frames.
+This validates pipeline execution for one example, not equivalence to all paper
+results or resolution of every reported quality issue.
+
+For missing imports, checkpoint compatibility, or RGB/shading confusion, see
+[troubleshooting](docs/TROUBLESHOOTING.md). Maintainers can run
+`python scripts/check_release.py --check_git` before publishing to ensure all
+Python sources are present in the Git index. GitHub Actions also checks the
+source tree and built distributions. Install and run from the source checkout
+for the bundled scripts, configs, examples and editable MoGe dependency.
 
 ## Attribution
 

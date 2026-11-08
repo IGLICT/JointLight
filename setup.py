@@ -6,7 +6,7 @@ requirements = [line.strip() for line in (root / "requirements.txt").read_text()
                 if line.strip() and not line.startswith("#")]
 setup(
     name="jointlight",
-    version="0.1.0",
+    version="0.1.1",
     description="JointLight video relighting training and inference",
     long_description=(root / "README.md").read_text(),
     long_description_content_type="text/markdown",

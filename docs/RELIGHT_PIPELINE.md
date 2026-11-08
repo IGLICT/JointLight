@@ -225,7 +225,11 @@ input video during command inspection.
 ## Validation scope
 
 The launcher and renderer CLI, argument forwarding, intermediate file handling,
-video preparation and failure propagation are checked locally.
-GPU geometry inference and Mitsuba rendering require the optional environment and
-CUDA; a full real-model relighting run has not been performed in the sandbox.
+video preparation and failure propagation are checked locally. An end-to-end
+81-frame run of `video_0.mp4` with `park_bench_1k.hdr` has also completed on an
+A800 using a new Python 3.10 environment and the release constraints. This
+includes MoGe inference, CUDA Mitsuba rendering, JointLight inference and the
+five-panel comparison; all saved MP4s were decoded and contained 81 frames.
+See the README for parameters and validation limits, and
+[troubleshooting](TROUBLESHOOTING.md) for import and output issues.
 MoGe's original license notices are retained in `third_party/MoGe/LICENSE`.

@@ -8,6 +8,7 @@ recursive-include scripts *.sh *.py
 recursive-include third_party/MoGe *.py *.toml *.md *.sha256 LICENSE
 include train.py inference.py run_relit_pipeline.py run_relighting.py
 include pyproject.toml THIRD_PARTY_NOTICES.md .gitignore .gitattributes
+include CHANGELOG.md
 prune models
 prune outputs*
 prune examples/assets
